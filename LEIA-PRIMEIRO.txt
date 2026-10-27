@@ -1,0 +1,27 @@
+LTE LAB VISUALIZER
+
+Para o notebook Ubuntu, siga docs/INSTALACAO-UBUNTU.md.
+O Mac atual é usado para desenvolvimento; execute o aplicativo no Ubuntu.
+
+Abra "Abrir LTE Lab.command" para iniciar a aplicação no macOS.
+Ou abra o terminal nesta pasta e execute: npm start
+Também é possível executar: node main.cjs
+No VS Code: F5 e selecione "Abrir LTE Lab".
+
+Primeira instalação em outro computador:
+1. Instale Node.js 22.12 ou superior.
+2. Execute npm ci nesta pasta.
+3. Execute npm start.
+
+O README.md contém o guia completo e um roteiro de apresentação.
+O quadro de progresso está em docs/KANBAN.md.
+O mapa do código está em docs/ARQUITETURA.md.
+Os dados do notebook estão em docs/AMBIENTE-LABORATORIO.md.
+
+Escolha Attach ou S1 Handover. Next Step avança um evento; os botões
+laterais executam a etapa atual. Auto Run avança automaticamente.
+Presentation Mode amplia a topologia para demonstrar à turma.
+
+TODAS AS RESPOSTAS SÃO SIMULADAS.
+Os comandos de laboratório aparecem como texto; não são executados.
+Nenhum Docker, banco, rádio ou serviço Open5GS é controlado pelo aplicativo.

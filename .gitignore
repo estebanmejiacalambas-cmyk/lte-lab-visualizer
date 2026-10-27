@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.DS_Store
+test-results/
+config/*.local.json
+.env
+.env.*
+!.env.example
+*.pcap
+*.pcapng
+*.log
+diagnostico.local.json

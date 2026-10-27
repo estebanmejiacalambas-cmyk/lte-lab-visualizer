@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "target": { "platform": "linux", "architecture": "x64", "ubuntuVersion": "24.04" },
+  "paths": {
+    "labDirectory": "~/srsran/lte_lab",
+    "srsranDirectory": "~/srsran/srsRAN_4G_23_11",
+    "srsenbBinary": "~/srsran/srsRAN_4G_23_11/build/srsenb/src/srsenb",
+    "srsueBinary": "~/srsran/srsRAN_4G_23_11/build/srsue/src/srsue",
+    "enbConfig": "~/srsran/lte_lab/enb_open5gs.conf",
+    "ueConfig": "~/srsran/lte_lab/ue.conf",
+    "open5gsConfigDirectory": "/etc/open5gs",
+    "open5gsLogDirectory": "/var/log/open5gs",
+    "open5gsTestDirectory": "~/open5gs-2.8.0",
+    "handoverBinary": "~/open5gs-2.8.0/build/tests/handover/handover",
+    "handoverConfig": "~/open5gs-2.8.0/build/configs/sample_handover.yaml",
+    "sessionDirectory": "~/srsran/visualizer-sessions"
+  },
+  "mongodb": { "container": "open5gs_mongo", "database": "open5gs" },
+  "handover": { "database": "open5gs_handover", "testCase": "epc-s1-test", "timeoutSeconds": 180 },
+  "capture": { "interface": "lo" },
+  "expectedVersions": { "srsran": "23.11", "open5gsPackages": "2.8.0~noble5", "open5gsTests": "2.8.0" }
+}

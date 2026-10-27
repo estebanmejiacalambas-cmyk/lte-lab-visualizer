@@ -1,0 +1,13 @@
+import type { Snapshot, SimulationController } from '../controller/SimulationController';
+export function SimulationControls({state,controller}:{state:Snapshot;controller:SimulationController}) {
+  const {definition,index,busy,running}=state, next=definition.events[index+1];
+  return <aside className="control-panel"><div className="section-heading"><span>PROCEDIMENTO</span><small>{definition.groups.length} etapas</small></div><div className="group-list">{definition.groups.map((group,i)=>{
+    const events=definition.events.map((e,j)=>({...e,index:j})).filter(e=>e.group===group.id);
+    const done=events.every(e=>e.index<=index), available=next?.group===group.id;
+    return <button key={group.id} className={`step-button ${done?'done':''} ${available?'current':''}`} disabled={!done&&(!available||busy||running)} onClick={()=>done?controller.review(events.at(-1)!.index):controller.runGroup(group.id)} title={done?'Rever explicação':available?'Executar os eventos desta etapa':'Conclua a etapa anterior'}><span className="step-number">{done?'✓':String(i+1).padStart(2,'0')}</span><span>{group.title}{available&&<small>{busy?'Processando…':next.title}</small>}</span><span className="step-tail">{done?'↗':available?'›':'·'}</span></button>;
+  })}</div><div className="sidebar-note"><b>Ambiente simulado</b><p>Nenhum comando Linux é executado. As respostas são locais e predefinidas.</p></div></aside>;
+}
+export function PlaybackControls({state,controller,presentation,onPresentation}:{state:Snapshot;controller:SimulationController;presentation:boolean;onPresentation:()=>void}) {
+  const done=state.index===state.definition.events.length-1;
+  return <div className="playback"><div className="playback-buttons"><button onClick={controller.previous} disabled={state.index<0&& !state.busy} title="Voltar e restaurar o estado anterior">← Previous</button><button className="primary" onClick={()=>void controller.next()} disabled={state.busy||state.running||done}>{state.busy?'Processando…':'Next Step →'}</button><button onClick={state.running?controller.pause:controller.auto} disabled={done}>{state.running?'Ⅱ Pause':state.index<0?'▷ Auto Run':'▷ Resume'}</button><select aria-label="Velocidade da demonstração" value={state.speed} onChange={e=>controller.setSpeed(Number(e.target.value))}><option value="0.5">0.5×</option><option value="1">1×</option><option value="2">2×</option></select><button className="reset" onClick={controller.reset}>↺ Reset Simulation</button></div><button className={presentation?'selected-button':''} aria-pressed={presentation} onClick={onPresentation}>⛶ {presentation?'Exit Presentation':'Presentation Mode'}</button></div>;
+}
