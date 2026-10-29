@@ -22,15 +22,16 @@ Situação atual: usuário informou autorização do chefe e concluiu clonagem d
 
 ## Fazendo
 
-- **15 · Publicar os quatro cenários:** autorizado em 29/10; revisão, build e 36 testes isolados aprovados. Mapa de comandos excluído da publicação a pedido do usuário; publicação das simulações em preparação; validação visual permanece pendente no Ubuntu.
 
-- **14 · Adicionar Paging simulado (solicitado pelo usuário):** código implementado com 13 grupos e 19 eventos, topologia srsEPC própria e sequência Idle → downlink → Paging → Service Request → retomada. Namespace/rota explicados para evitar ping local. Build e 23 testes isolados aprovados, incluindo 5 de Paging e renderização HTML estática. Validação visual/interação pendente em ambiente autorizado. Nenhum aplicativo aberto no Mac; não publicado.
+- **14 · Adicionar Paging simulado (solicitado pelo usuário):** código implementado com 13 grupos e 19 eventos, topologia srsEPC própria e sequência Idle → downlink → Paging → Service Request → retomada. Namespace/rota explicados para evitar ping local. Build e 23 testes isolados aprovados, incluindo 5 de Paging e renderização HTML estática. Validação visual/interação pendente em ambiente autorizado. Nenhum aplicativo aberto no Mac; publicado em 29/10 no commit 9a32018.
 
-- **13 · Adicionar TAU simulado (solicitado pelo usuário):** código implementado com 11 grupos e 13 eventos, topologia própria e evidências de execução/Request/Accept. Compilação, 5 testes TAU, 4 testes de mensagens e 9 testes do controlador aprovados. HTML estático conferido por testes; validação visual/interação pendente em ambiente autorizado. Não publicado.
-- **12 · Painel didático de mensagens simuladas (antecipado):** implementação concluída com filtros, detalhes, revisão e destaque de uma rota na topologia. Build, 4 testes de mensagens e 9 de controlador aprovados. Teste de UI ampliado, ainda não executado; validação visual pendente em ambiente autorizado. Mudanças locais, ainda não publicadas.
+- **13 · Adicionar TAU simulado (solicitado pelo usuário):** código implementado com 11 grupos e 13 eventos, topologia própria e evidências de execução/Request/Accept. Compilação, 5 testes TAU, 4 testes de mensagens e 9 testes do controlador aprovados. HTML estático conferido por testes; validação visual/interação pendente em ambiente autorizado. Publicado em 29/10 no commit 9a32018.
+- **12 · Painel didático de mensagens simuladas (antecipado):** implementação concluída com filtros, detalhes, revisão e destaque de uma rota na topologia. Build, 4 testes de mensagens e 9 de controlador aprovados. Teste de UI ampliado, ainda não executado; validação visual pendente em ambiente autorizado. Publicado como parte da versão 9a32018; validação visual ainda pendente.
 - Cartão **06** aguarda resolução da sandbox com Eliseu e conferência visual dos quatro cenários. Captura real e executor Linux continuam fora desta entrega.
 
 ## Feito
+
+- **15 · Publicar os quatro cenários:** push de 9a32018 para main confirmado em 29/10. Build e 36 testes isolados aprovados. Mapa dos comandos excluído do commit e do histórico enviado a pedido do usuário. A publicação não resolve a sandbox nem certifica a interface gráfica no Ubuntu.
 
 
 - **05 · Validar e publicar primeira versão:** commit `2941b4b` confirmado diretamente na branch `main` do GitHub por `git ls-remote`. Build e 22 testes aprovados antes da publicação. Repositório privado: `https://github.com/estebanmejiacalambas-cmyk/srsRAN`. Validação gráfica e diagnóstico real no Ubuntu continuam pendentes.
@@ -65,3 +66,5 @@ Situação atual: usuário informou autorização do chefe e concluiu clonagem d
 - 28/10/2026: Paging adicionado a pedido do usuário conforme especificação fornecida. Comandos permanecem textos do mock; não houve execução no laboratório nem integração com Wireshark.
 
 - 29/10/2026: usuário confirmou instalação/compilação no Ubuntu e diagnóstico sem pendências; Electron abortou por configuração da sandbox. Orientação com Eliseu pendente. Publicação das simulações autorizada explicitamente. Mapa de comandos será entregue na conversa, fora do GitHub.
+
+- 29/10/2026: publicação de TAU/Paging confirmada; mapa entregue separadamente na conversa. Notebook ainda precisa receber a atualização.

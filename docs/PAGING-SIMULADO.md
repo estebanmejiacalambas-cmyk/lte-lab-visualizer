@@ -37,4 +37,4 @@ Integração com comandos reais e Wireshark permanece fora desta entrega. No lab
 
 `npm run test:paging` cobre sequência de pré-condições, retorno/reset, descarte de resposta pendente, rótulos próprios e renderização HTML estática de todas as rotas. Os testes não abrem o aplicativo.
 
-Build e 23 testes de Paging, TAU, mensagens e controlador aprovados em 28/10/2026. Conferência visual e interação no notebook autorizado ainda pendentes. Alterações locais, não publicadas.
+Build e 23 testes de Paging, TAU, mensagens e controlador aprovados em 28/10/2026. Conferência visual e interação no notebook autorizado ainda pendentes. Publicado em 29/10/2026 no commit 9a32018; validação visual continua pendente.
