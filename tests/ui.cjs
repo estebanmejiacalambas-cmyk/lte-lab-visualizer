@@ -40,12 +40,64 @@ const path=require('node:path');
  await page.screenshot({path:path.join(os.tmpdir(),'lte-handover.png')});
  assert.ok((await page.locator('.network-node').first().getAttribute('style')).includes('280'));
  await page.getByRole('button',{name:/Resume/}).click();await page.locator('.simulation-summary').waitFor({timeout:12000});
+ // Message inspection is historical: highlighting a route must not rewind the UE.
+ const inspector=page.locator('.message-inspector');
+ await inspector.locator(':scope > summary').click();
+ await inspector.getByLabel('Contexto protocolar').selectOption('S1AP');
+ await inspector.getByLabel('Participante').selectOption('target');
+ await inspector.getByLabel('Mensagem ou etapa').fill('HandoverRequest');
+ assert.equal(await inspector.locator('tbody tr').count(),1);
+ await inspector.getByRole('button',{name:/HandoverRequest/}).click();
+ assert.match(await page.locator('.route-strip').innerText(),/MME → eNodeB B/);
+ assert.equal(await page.locator('.message-route').count(),1);
+ assert.match(await page.locator('.ue-state').innerText(),/10.45.0.2/);
+ assert.ok((await page.locator('.network-node').first().getAttribute('style')).includes('280'));
+ await inspector.getByLabel('Mensagem ou etapa').fill('nenhum-registro');
+ assert.equal(await inspector.locator('tbody tr').count(),0);
+ assert.match(await inspector.locator('.message-detail').innerText(),/fora dos filtros/);
+ await inspector.getByRole('button',{name:'Voltar ao evento atual',exact:true}).click();
+ await inspector.getByRole('button',{name:'Limpar filtros',exact:true}).click();
  await page.getByRole('button',{name:/Test Cases/}).click();assert.match(await page.locator('dialog').innerText(),/All tests passed/);await page.keyboard.press('Escape');
  await page.getByRole('button',{name:/Reset Simulation/}).click();await next().click();await page.getByRole('button',{name:/Reset Simulation/}).click();await page.waitForTimeout(650);assert.match(await page.locator('.timeline .section-heading').innerText(),/0 \/ 15/);
+ assert.equal(await inspector.locator('tbody tr').count(),0);
  await page.getByRole('button',{name:/Exit Presentation/}).click();
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  await page.getByRole('button',{name:/01 Attach Procedure/}).click();
  await page.getByRole('button',{name:/Auto Run/}).click();await page.locator('.simulation-summary').waitFor({timeout:35000});
  assert.match(await page.locator('.ue-state').innerText(),/10.45.0.2/);
- assert.deepEqual(errors,[]);await browser.close();console.log('PASS UI: Attach completo, revisão, clipboard, terminal, conceitos, Handover automático, pause/resume, apresentação, movimento, casos negativos e reset concorrente.');
+ await page.getByRole('button',{name:/03 Tracking Area Update/}).click();
+ assert.match(await page.locator('.topology-footer').innerText(),/999\/70/);
+ assert.equal(await page.locator('.network-node').count(),3);
+ for(let i=0;i<13;i++) {
+  await next().click();
+  await page.waitForFunction(()=>!document.querySelector('.playback .primary').disabled||!!document.querySelector('.simulation-summary'));
+  if(i===7) {
+   assert.match(await page.locator('.tau-evidence').innerText(),/APROVADA/);
+   assert.equal(await page.locator('.simulation-summary').count(),0);
+  }
+ }
+ assert.match(await page.locator('.simulation-summary').innerText(),/TAU VALIDADO/);
+ assert.doesNotMatch(await page.locator('.tau-evidence').innerText(),/PENDENTE/);
+ await page.locator('.timeline-track').getByRole('button',{name:/TAU Request/}).click();
+ assert.match(await page.locator('.route-strip').innerText(),/UE → MME/);
+ await page.getByRole('button',{name:/Reset Simulation/}).click();
+ assert.equal(await page.locator('.simulation-summary').count(),0);
+ assert.match(await page.locator('.tau-evidence').innerText(),/PENDENTE/);
+ await page.getByRole('button',{name:/04 Paging/}).click();
+ assert.equal(await page.locator('.network-node').count(),4);
+ assert.match(await page.locator('.topology').innerText(),/srsEPC/);
+ for(let i=0;i<19;i++) {
+  await next().click();
+  await page.waitForFunction(()=>!document.querySelector('.playback .primary').disabled||!!document.querySelector('.simulation-summary'));
+  if(i===9) {
+   assert.match(await page.locator('.ue-state').innerText(),/RRC IDLE/);
+   assert.match(await page.locator('.ue-state').innerText(),/172.16.0.2/);
+   assert.equal(await page.locator('.simulation-summary').count(),0);
+  }
+ }
+ assert.match(await page.locator('.simulation-summary').innerText(),/PAGING VALIDADO/);
+ await page.getByRole('button',{name:/Reset Simulation/}).click();
+ assert.equal(await page.locator('.simulation-summary').count(),0);
+ assert.match(await page.locator('.ue-state').innerText(),/NOT REGISTERED/);
+ assert.deepEqual(errors,[]);await browser.close();console.log('PASS UI: Attach, Handover, mensagens, TAU, Paging, revisão e reset.');
 })().catch(e=>{console.error(e);process.exit(1)});

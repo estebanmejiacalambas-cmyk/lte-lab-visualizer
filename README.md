@@ -1,6 +1,6 @@
 # LTE Lab Visualizer
 
-Protótipo desktop educacional de **Attach** e **S1 Handover**, com topologia, terminal, linha do tempo e explicações sincronizados. Feito para apresentar uma proposta de laboratório visual antes de integrar srsRAN/Open5GS reais.
+Protótipo desktop educacional de **Attach**, **S1 Handover**, **Tracking Area Update (TAU)** e **Paging**, com topologia, terminal, linha do tempo e explicações sincronizados. Feito para apresentar uma proposta de laboratório visual antes de integrar srsRAN/Open5GS reais.
 
 **Todas as respostas são simuladas. Nenhum comando exibido é executado.** Não há shell remoto/local de laboratório, SSH, acesso a Docker, captura de pacotes ou banco de dados real. Os comandos de instalação abaixo iniciam somente a aplicação e suas ferramentas de desenvolvimento.
 
@@ -13,6 +13,12 @@ Neste projeto, o Mac atual é usado para desenvolvimento e preparação dos arqu
 - [Ambiente do laboratório](docs/AMBIENTE-LABORATORIO.md): dados do notebook Ubuntu e informações ainda necessárias.
 - [Configuração local](docs/CONFIGURACAO.md): perfil do notebook e validação estrutural, sem iniciar serviços.
 - [Instalação e diagnóstico no Ubuntu](docs/INSTALACAO-UBUNTU.md): preparar Node/npm, verificar o laboratório existente e abrir o mock no notebook.
+- [Conversa com o TI](docs/CONVERSA-TI.md): pontos a confirmar antes de continuar no notebook do estágio.
+- [Atualizar no Ubuntu](docs/ATUALIZAR-UBUNTU.md): receber os quatro cenários preservando o perfil local.
+- [Paging simulado](docs/PAGING-SIMULADO.md): srsEPC, UE em Idle, namespace/rota e retomada após tráfego downlink.
+- [TAU simulado](docs/TAU-SIMULADO.md): roteiro idle-test, PLMN 999/70, validação em duas camadas e limites da representação.
+
+Instalação, autenticação e execução no notebook do estágio aguardam a orientação do TI solicitada pelo usuário. O desenvolvimento local continua sem abrir o aplicativo no Mac.
 
 ## Inicialização
 
@@ -101,6 +107,8 @@ src/
   simulations/
     attach.ts                     Eventos e estados do Attach
     handover.ts                   Eventos e estados do Handover
+    tau.ts                        Roteiro TAU da suíte Open5GS
+    paging.ts                     Paging com srsEPC e TUN em ue1
     helpers.ts                    Estado inicial e aplicação de patches
   types/simulation.ts             Tipos de eventos, rede e terminal
   styles/app.css                  Layout e estados visuais
@@ -183,9 +191,17 @@ O roteiro fornecido é a fonte principal dos exemplos de logs. As referências c
 
 ## Explicações ampliadas
 
-O painel de cada um dos 35 eventos contém resumo, **Observe na tela** e a ideia principal. **Aprofundar** abre contexto adicional, uma pergunta para a turma e sua resposta comentada. A rolagem do texto volta ao início quando o evento muda; os estados de registro, rádio e IP permanecem separados do texto.
+### Inspeção de mensagens simuladas
 
-As introduções de Attach e Handover são diferentes. O texto distingue evidência de log, representação didática e conclusão que depende de teste adicional. Os arquivos de eventos mantêm o conteúdo no campo `teaching`, separado da apresentação.
+O painel recolhível **Explorar mensagens**, abaixo da área principal, lista as rotas didáticas das etapas concluídas. Oferece filtros por contexto protocolar, participante e texto da mensagem/etapa. Selecionar uma linha revisa o evento na timeline, destaca somente a direção escolhida na topologia e mantém o estado atual da rede. Etapas sem rotas não geram registros.
+
+As linhas são representações do roteiro: não há captura real, bytes, timestamps ou números de frames inventados. O contexto protocolar descreve a etapa, podendo abranger mais de um trecho. Revisão, Previous, Reset e troca de cenário respeitam os eventos disponíveis. A implementação foi compilada e testada em lógica isolada; a validação visual permanece pendente de execução em ambiente autorizado.
+
+`npm run test:messages` verifica visibilidade, filtros, múltiplas rotas e preservação de estado. O teste de interface foi ampliado para inspeção de Handover, mas não executado nesta etapa por orientação de não abrir o aplicativo no Mac.
+
+O painel de cada um dos 67 eventos contém resumo, **Observe na tela** e a ideia principal. **Aprofundar** abre contexto adicional, uma pergunta para a turma e sua resposta comentada. A rolagem do texto volta ao início quando o evento muda; os estados de registro, rádio e IP permanecem separados do texto.
+
+As introduções de Attach, Handover, TAU e Paging são específicas de cada cenário. O texto distingue evidência de log, representação didática e conclusão que depende de teste adicional. Os arquivos de eventos mantêm o conteúdo no campo `teaching`, separado da apresentação.
 
 `PERGUNTAS-PARA-VALIDAR-LABORATORIO.txt` contém perguntas prontas para o responsável técnico. Versões, confirmação exata de S1 Setup, motivo do RRC Release, serviço na porta 7777 e abrangência da suíte dependem de evidência do ambiente; não foram presumidos como verificados.
 
@@ -196,3 +212,7 @@ Referências adicionais para revisão dos conceitos:
 - [MongoDB — significado do comando ping](https://www.mongodb.com/docs/v7.0/reference/command/ping/)
 
 As referências são de contexto; a versão do laboratório deve ser confirmada antes de atribuir comportamentos específicos a seus logs.
+
+### Paging
+
+Selecione **04 · Paging** para percorrer 13 etapas e 19 eventos. A topologia representa srsEPC, eNodeB, UE e Host, com IP 172.16.0.2. O roteiro diferencia Attach, Idle, chamado da rede e retomada do serviço. `npm run test:paging` executa os testes isolados; comandos mostrados no terminal continuam sem execução real.

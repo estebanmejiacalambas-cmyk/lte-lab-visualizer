@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Prot\u00f3tipo educacional local de Attach e S1 Handover \u2014 somente mocks",
+  "description": "Simulador educacional LTE de Attach, S1 Handover, TAU e Paging — somente mocks",
   "main": "electron/main.cjs",
   "scripts": {
     "diagnose": "node scripts/diagnose.mjs",
     "test:diagnose": "node --test tests/diagnostics.test.mjs",
+    "test:messages": "node --import tsx --test tests/messages.test.ts",
+    "test:tau": "node --import tsx --test tests/tau.test.ts",
     "config:check": "node scripts/check-config.mjs",
     "test:config": "node --test tests/config.test.mjs",
     "dev": "vite --host 127.0.0.1",
@@ -18,7 +20,8 @@
     "test": "tsx --test tests/controller.test.ts",
     "test:ui": "node tests/ui.cjs",
     "postinstall": "node node_modules/electron/install.js",
-    "test:desktop": "node tests/desktop.cjs"
+    "test:desktop": "node tests/desktop.cjs",
+    "test:paging": "node --import tsx --test tests/paging.test.ts"
   },
   "engines": {
     "node": ">=22.12"

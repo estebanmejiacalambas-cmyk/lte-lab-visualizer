@@ -1,4 +1,4 @@
-export type SimulationId = 'attach' | 'handover';
+export type SimulationId = 'attach' | 'handover' | 'tau' | 'paging';
 export type NodeId = 'ue' | 'enb' | 'target' | 'mme' | 'hss' | 'db' | 'sgw' | 'pgw';
 export type StateColor = 'off' | 'active' | 'success' | 'waiting' | 'error';
 export interface NodeState { status: string; tone: StateColor; detail?: string }
@@ -13,6 +13,15 @@ export interface NetworkState {
   ip: string;
   capture: boolean;
   completed: boolean;
+  tauExecution?: boolean;
+  tauRequest?: boolean;
+  tauAccept?: boolean;
+  pagingIdle?: boolean;
+  pagingNamespace?: boolean;
+  pagingRoute?: boolean;
+  pagingMatch?: boolean;
+  pagingServiceRequest?: boolean;
+  pagingResumed?: boolean;
 }
 export interface NetworkPatch extends Partial<Omit<NetworkState, 'nodes' | 'links'>> {
   nodes?: Partial<Record<NodeId, NodeState>>;

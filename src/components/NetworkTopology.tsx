@@ -15,14 +15,39 @@ function NodeIcon({id}:{id:NodeId}){
   return <g><rect x="-13" y="-11" width="26" height="22" rx="3"/><path d="M-8-4h16M-8 3h10"/><circle cx="8" cy="6" r="1"/></g>;
 }
 export function NetworkNode({id,position,state,selected,onSelect,mode}:{id:NodeId;position:Position;state:NodeState;selected:boolean;onSelect:(id:NodeId)=>void;mode:SimulationId}){
-  const title=id==='enb'&&mode==='attach'?'eNodeB':labels[id][0];
+  const title=mode==='paging'?(id==='pgw'?'Host':id==='mme'?'srsEPC':id==='enb'?'eNodeB':'UE'):id==='enb'&&mode==='attach'?'eNodeB':labels[id][0];
   return <g role="button" tabIndex={0} aria-label={`${title}: ${state.status}`} onClick={()=>onSelect(id)} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();onSelect(id);}}} className={`network-node ${state.tone} ${selected?'selected':''}`} style={{transform:`translate(${position.x}px,${position.y}px)`}}>
     <rect x="-72" y="-48" width="144" height="96" rx="6"/><g className="node-icon" transform="translate(-47,-15)"><NodeIcon id={id}/></g>
-    <text className="node-name" x="-22" y="-17">{title}</text><text className="node-role" x="-22" y="0">{id==='enb'&&mode==='attach'?'srsENB':labels[id][1]}</text>
+    <text className="node-name" x="-22" y="-17">{title}</text><text className="node-role" x="-22" y="0">{mode==='paging'?(id==='pgw'?'Downlink / ICMP':id==='mme'?'Core integrado':id==='enb'?'srsENB · ZeroMQ':'srsUE · TUN em ue1'):mode==='tau'?(id==='ue'?'Papel da suíte':id==='mme'?'MME do teste':'open5gs_tau'):id==='enb'&&mode==='attach'?'srsENB':labels[id][1]}</text>
     <circle className="node-dot" cx="-57" cy="27" r="3"/><text className="node-status" x="-47" y="31">{state.status}</text>
   </g>;
 }
 export function NetworkTopology({network,mode,event,onSelect,selected}:{network:NetworkState;mode:SimulationId;event?:SimulationEvent;onSelect:(id:NodeId)=>void;selected:NodeId|null}) {
+  if(mode==='paging') {
+    const positions: Partial<Record<NodeId,Position>> = {pgw:{x:120,y:170},mme:{x:370,y:170},enb:{x:620,y:170},ue:{x:870,y:170}};
+    const names: Partial<Record<NodeId,string>> = {pgw:'Host',mme:'srsEPC',enb:'eNodeB',ue:'UE'};
+    const edges: [NodeId,NodeId,string][] = [['pgw','mme','srs_spgw_sgi'],['mme','enb','S1'],['enb','ue','ZeroMQ']];
+    return <div className="topology-canvas"><svg viewBox="0 0 1010 360" role="group" aria-label="Topologia Paging · srsEPC">
+      <defs><marker id="paging-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#72b5f7"/></marker></defs>
+      <text className="zone-label" x="35" y="35">srsRAN 4G 23.11 · PLMN 001/01 · PAGING SIMULADO</text>
+      <text className="zone-label" x="35" y="285">Host: 172.16.0.1 → UE: 172.16.0.2 · interface tun_srsue em ue1</text>
+      <text className="zone-label" x="35" y="315">Namespace da TUN; processo srsUE iniciado normalmente</text>
+      {edges.map(([from,to,label])=><NetworkLink key={from+to} a={positions[from]!} b={positions[to]!} label={label} tone={network.links[from+'-'+to]??'off'}/>)}
+      {(Object.keys(positions) as NodeId[]).map(id=><NetworkNode key={id} id={id} position={positions[id]!} state={network.nodes[id]} mode={mode} selected={selected===id||!!event?.routes.some(r=>r.from===id||r.to===id)} onSelect={onSelect}/>)}
+      {event?.routes.map((r,i)=><g key={i} className="message-route"><line {...lineGeometry(positions[r.from]!,positions[r.to]!)} markerEnd="url(#paging-arrow)"/></g>)}
+    </svg><div className="route-strip"><span className="route-label">MENSAGEM</span><b>{event?.routes.length?event.routes.map(r=>`${names[r.from]} → ${names[r.to]} · ${r.label}`).join(' / '):'Evidências simuladas · nenhuma execução ou captura real'}</b></div></div>;
+  }
+  if(mode==='tau') return <div className="topology-canvas">
+    <svg viewBox="0 0 1010 360" role="group" aria-label="Topologia lógica TAU · framework Open5GS">
+      <defs><marker id="tau-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#72b5f7"/></marker></defs>
+      <text className="zone-label" x="50" y="40">OPEN5GS 2.8.0 · idle-test · PLMN 999/70</text>
+      <text className="zone-label" x="50" y="310">NAS lógico · transporte via acesso/S1AP abstraído · sem rádio real</text>
+      <NetworkLink a={{x:180,y:160}} b={{x:560,y:160}} tone={network.tauAccept?'success':'off'} label="NAS · UE ↔ MME"/>
+      {(['ue','mme','db'] as NodeId[]).map((id,i)=><NetworkNode key={id} id={id} position={{x:[180,560,840][i],y:160}} state={network.nodes[id]} selected={selected===id||!!event?.routes.some(r=>r.from===id||r.to===id)} onSelect={onSelect} mode={mode}/>)}
+      {event?.routes.map((r,i)=><g key={i} className="message-route"><line x1={r.from==='ue'?262:478} y1="160" x2={r.to==='mme'?478:262} y2="160" markerEnd="url(#tau-arrow)"/></g>)}
+    </svg>
+    <div className="route-strip"><span className="route-label">MENSAGEM</span><b>{event?.routes.length?event.routes.map(r=>`${labels[r.from][0]} → ${labels[r.to][0]} · ${r.label}`).join(' / '):'Execução e análise de evidências simuladas · nenhuma captura real'}</b></div>
+  </div>;
   const positions={...basePositions};
   if(mode==='handover'){positions.enb={x:310,y:110};positions.ue={x:100,y:network.serving==='target'?280:110};}
   const edges=mode==='handover'?[...links.filter(l=>!(l.from==='enb'&&l.to==='sgw')),{from:'ue' as const,to:'target' as const,label:'Rádio / alvo'},{from:'target' as const,to:'mme' as const,label:'S1-MME'}]:links;

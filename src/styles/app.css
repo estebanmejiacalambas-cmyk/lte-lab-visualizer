@@ -12,3 +12,36 @@
 .teaching-body h3 { margin-top: 16px; }
 .teaching-body p { margin-bottom: 8px; }
 .teaching-body .class-question { color: #e0eaf6; }
+
+.message-inspector { margin: 16px 22px; }
+.message-inspector > summary { cursor: pointer; padding: 15px 17px; color: #dce4ee; font-weight: 600; }
+.message-inspector > summary .mock-chip { margin-left: 12px; vertical-align: middle; }
+.message-count { margin-left: 16px; color: var(--muted); font-weight: 400; font-size: 11px; }
+.message-inspector[open] > summary { border-bottom: 1px solid var(--border); }
+.message-intro { padding: 13px 17px 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+.message-intro p { margin-bottom: 7px; }
+.message-filters { display: flex; align-items: end; gap: 12px; flex-wrap: wrap; padding: 12px 17px 16px; }
+.message-filters label { display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: 11px; }
+.message-filters select { max-width: 260px; }
+.message-filters input { background: #101822; color: #dce4ee; padding: 8px 10px; border: 1px solid #394658; border-radius: 5px; min-width: 220px; }
+.message-filters input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.message-filters > span { align-self: center; color: var(--muted); font-size: 11px; }
+.message-layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; border-top: 1px solid var(--border); }
+.message-table-scroll { max-height: 360px; overflow: auto; }
+.message-table { border-collapse: collapse; width: 100%; text-align: left; font-size: 11px; }
+.message-table caption { text-align: left; padding: 10px 15px; color: var(--muted); font-size: 10px; }
+.message-table th { position: sticky; top: 0; background: #202c3a; z-index: 1; font-weight: 500; }
+.message-table th, .message-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.message-table td:first-child { font-family: monospace; color: var(--muted); }
+.message-table td button { width: 100%; text-align: left; padding: 6px 8px; background: transparent; border-color: transparent; color: #c8e3ff; overflow-wrap: anywhere; }
+.message-table td button small { display: block; margin-top: 6px; color: var(--muted); font-size: 10px; }
+.message-table .message-selected { background: #243b50; }
+.message-table .message-selected td button { border-color: var(--blue); }
+.message-detail { padding: 18px; border-left: 1px solid var(--border); max-height: 360px; overflow: auto; background: #141e29; }
+.message-detail h2 { font-size: 18px; margin: 14px 0 10px; overflow-wrap: anywhere; }
+.message-detail p { font-size: 12px; line-height: 1.7; color: #b7c5d4; }
+.message-detail .message-direction { color: var(--blue); }
+.message-detail .message-notice { color: var(--muted); font-size: 10px; margin-top: 15px; }
+.message-detail details summary { cursor: pointer; color: #c8e3ff; margin-bottom: 12px; }
+.message-empty { margin: 20px; color: var(--muted); line-height: 1.7; font-size: 12px; }
+@media (max-width: 1100px) { .message-layout { grid-template-columns: minmax(0, 1fr); } .message-detail { border-left: 0; border-top: 1px solid var(--border); } }
