@@ -6,7 +6,7 @@ if ! command -v npm >/dev/null 2>&1; then
   exit 1
 fi
 if [ ! -d node_modules ]; then
-  echo 'Primeiro execute npm ci nesta pasta, conforme o README.'
+  echo 'Dependências do aplicativo ausentes.'
   read '?Pressione Enter para fechar.'
   exit 1
 fi

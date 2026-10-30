@@ -30,7 +30,6 @@ export async function inspectPath(path, kind) {
 export async function collectDiagnostics(config, options = {}) {
   const platform = options.platform ?? process.platform;
   const arch = options.arch ?? process.arch;
-  // Guard before any Linux probe, including when called outside the CLI.
   if (platform !== 'linux' || arch !== 'x64') throw new Error('Execute o diagnóstico somente no notebook Ubuntu x86_64. Nenhuma consulta ao laboratório foi executada.');
   const probe = options.probe ?? runProbe;
   const inspect = options.inspect ?? inspectPath;
@@ -79,7 +78,7 @@ export async function collectDiagnostics(config, options = {}) {
     add(`revisão:${id}`, result.ok && result.output === expected, `Tag esperada: ${expected}; revisão diferente requer conferência, sem checkout automático`);
   }
   const docker = await probe('docker', ['inspect', '--type', 'container', '--format', '{{.State.Status}}', config.mongodb.container]);
-  add('mongodb-container', docker.ok && docker.output === 'running', docker.ok && docker.output === 'running' ? 'container em execução; resposta do banco será verificada na integração' : 'container parado, ausente ou Docker sem acesso');
+  add('mongodb-container', docker.ok && docker.output === 'running', docker.ok && docker.output === 'running' ? 'container em execução; resposta do banco não verificada' : 'container parado, ausente ou Docker sem acesso');
   const network = await probe('ip', ['link', 'show', 'dev', config.capture.interface]);
   add('interface-captura', network.ok, network.ok ? 'interface presente; captura não iniciada' : network.reason);
   rows.push({ id: 'privilégios', status: 'INFO', detail: 'Não foi usado sudo. Autorização para controlar serviços/capturar tráfego e escrita de sessões ainda precisam de validação específica.' });

@@ -31,7 +31,6 @@ const introductions = {
 export function ExplanationPanel({event,reviewing,onLive,network,mode}:{event?:SimulationEvent;reviewing:boolean;onLive:()=>void;network:NetworkState;mode:SimulationId}) {
   const content = useRef<HTMLDivElement>(null);
   const intro = introductions[mode];
-  // A revisão de outro evento começa no início do texto, sem herdar sua rolagem.
   useEffect(() => { content.current?.scrollTo({top:0}); }, [event?.id, mode]);
   return <aside className="explanation panel">
     <div className="section-heading"><span>O QUE ESTÁ ACONTECENDO?</span><span className="small-icon">i</span></div>
@@ -51,7 +50,7 @@ export function ExplanationPanel({event,reviewing,onLive,network,mode}:{event?:S
         </div>
       </details>}
       {!event && <p className="provenance">Cinza: desligado · azul: ativo · verde: sucesso · amarelo: aguardando · vermelho: erro. As cores indicam o estado do componente ou etapa, não uma medição da rede.</p>}
-      {event && <p className="provenance">{event.educationalMock ? 'Sequência conceitual para ensino; não extraída de um log real.' : 'Saída fornecida no roteiro e reproduzida como simulação; não é uma medição ao vivo.'}{event.commandSource==='illustrative' && <><br/>Comando equivalente ilustrativo; depende da instalação.</>}</p>}
+      {event && <p className="provenance">{event.educationalMock ? 'Sequência conceitual para ensino; não extraída de um log real.' : 'Saída simulada; não é uma medição ao vivo.'}{event.commandSource==='illustrative' && <><br/>Comando equivalente ilustrativo; depende da instalação.</>}</p>}
     </div>
     {mode==='tau'?<dl className="ue-state tau-evidence"><div><dt>Camada A · execução</dt><dd>{network.tauExecution?'APROVADA (mock)':'PENDENTE'}</dd></div><div><dt>Request 0x48 · tipo 0</dt><dd>{network.tauRequest?'PRESENTE (mock)':'PENDENTE'}</dd></div><div><dt>Accept 0x49 · resultado 0</dt><dd>{network.tauAccept?'PRESENTE (mock)':'PENDENTE'}</dd></div></dl>:<dl className="ue-state"><div><dt>Registro no Core</dt><dd className={network.registered?'text-success':''}>{network.registered?'REGISTERED':'NOT REGISTERED'}</dd></div><div><dt>Conexão rádio</dt><dd>{network.radio}</dd></div><div><dt>Endereço IP</dt><dd>{network.ip}</dd></div></dl>}
   </aside>;

@@ -72,7 +72,6 @@ test('Paging renderiza srsEPC e Host sem herdar Core ou IP do Attach', async () 
   c.select('paging');
   for (const event of paging.events) await c.next();
   const network = c.getSnapshot().network;
-  // Render every route to catch missing node positions, without opening a browser.
   for (const event of paging.events) {
     const html = renderToStaticMarkup(createElement(NetworkTopology, {network, mode:'paging', selected:null, onSelect:()=>{}, event}));
     assert.match(html, /Host/);

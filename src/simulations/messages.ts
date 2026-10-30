@@ -4,8 +4,6 @@ export const componentNames: Record<NodeId, string> = {
   ue: 'UE', enb: 'eNodeB A', target: 'eNodeB B', mme: 'MME',
   hss: 'HSS', db: 'MongoDB', sgw: 'SGW', pgw: 'PGW / UPF',
 };
-
-// Each record is a route from the teaching script, NOT a decoded network frame.
 export interface TeachingMessage {
   id: string;
   sequence: number;

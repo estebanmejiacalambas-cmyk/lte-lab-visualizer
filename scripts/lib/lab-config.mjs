@@ -1,6 +1,4 @@
 import { readFile } from 'node:fs/promises';
-
-// Data only: this module never starts processes or expands shell expressions.
 const literal = expected => value => value === expected;
 const identifier = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/.test(value);
 const version = value => typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9.+_~-]{0,63}$/.test(value);
@@ -40,7 +38,6 @@ export function validateLabConfig(config) {
       errors.push(`${field}: esperado um objeto.`);
       return;
     }
-    // Do not echo unknown keys or values: they could contain credentials.
     if (Object.keys(value).some(key => !Object.hasOwn(rule, key))) {
       errors.push(`${field}: campo não permitido; use somente os campos do exemplo.`);
     }

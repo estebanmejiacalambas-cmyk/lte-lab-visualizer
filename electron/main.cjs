@@ -4,7 +4,6 @@ if (!app) {
   console.error('Este arquivo precisa do runtime Electron. Execute node main.cjs na raiz do projeto, npm start ou F5 no VS Code.');
   process.exit(1);
 }
-// No preload, IPC, shell bridge or network backend is exposed to the renderer.
 function createWindow() {
   const win = new BrowserWindow({ width: 1520, height: 960, minWidth: 1120, minHeight: 700,
     title: 'LTE Lab Visualizer', backgroundColor: '#11161d', autoHideMenuBar: true,

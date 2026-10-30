@@ -19,7 +19,6 @@ export function MessageInspector({ rows, selected, reviewIndex, busy, mode, onSe
   useEffect(() => { if (!rows.length) { setProtocol(''); setComponent(''); setQuery(''); } }, [rows.length]);
   const protocols = [...new Set(rows.map(row => row.event.protocol))];
   const components = [...new Set(rows.flatMap(row => [row.route.from, row.route.to]))];
-  // A rewind can remove every occurrence of a previously chosen filter.
   const activeProtocol = protocols.includes(protocol) ? protocol : '';
   const activeComponent = components.some(id => id === component) ? component : '';
   const filtered = filterMessages(rows, activeProtocol, activeComponent, query);

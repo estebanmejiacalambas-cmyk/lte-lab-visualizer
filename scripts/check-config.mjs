@@ -12,7 +12,7 @@ if (args.length > 1 || (args.length === 1 && args[0] !== '--example')) {
     await loadLabConfig(path);
     console.log(`Configuração ${example ? 'de exemplo' : 'local'} válida estruturalmente.`);
     console.log('Nenhum serviço iniciado. Caminhos, versões instaladas e permissões do notebook ainda não foram verificados.');
-    console.log('Este perfil prepara a integração futura; o aplicativo continua usando o mock.');
+    console.log('O aplicativo usa respostas simuladas.');
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;

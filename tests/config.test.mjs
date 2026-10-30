@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { loadLabConfig, validateLabConfig } from '../scripts/lib/lab-config.mjs';
 
 const example = JSON.parse(await readFile(new URL('../config/lab.example.json', import.meta.url), 'utf8'));
-test('perfil do manual é validado sem depender dos arquivos do Ubuntu', () => {
+test('perfil de configuração é validado sem depender dos arquivos do Ubuntu', () => {
   assert.equal(validateLabConfig(structuredClone(example)).capture.interface, 'lo');
 });
 test('campos ausentes e plataforma incompatível produzem diagnóstico', () => {

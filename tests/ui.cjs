@@ -40,7 +40,6 @@ const path=require('node:path');
  await page.screenshot({path:path.join(os.tmpdir(),'lte-handover.png')});
  assert.ok((await page.locator('.network-node').first().getAttribute('style')).includes('280'));
  await page.getByRole('button',{name:/Resume/}).click();await page.locator('.simulation-summary').waitFor({timeout:12000});
- // Message inspection is historical: highlighting a route must not rewind the UE.
  const inspector=page.locator('.message-inspector');
  await inspector.locator(':scope > summary').click();
  await inspector.getByLabel('Contexto protocolar').selectOption('S1AP');

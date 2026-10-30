@@ -40,7 +40,7 @@ test('TAU captura antes da execução e completa somente após ambas as camadas'
   c.dispose();
 });
 
-test('identidade do cenário e evidências NAS seguem o suporte fornecido', () => {
+test('identidade do cenário e evidências NAS são consistentes', () => {
   const rows = completedMessages(tau, tau.events.length - 1);
   assert.deepEqual(rows.map(r => [r.event.id, r.route.from, r.route.to]), [
     ['tau-request', 'ue', 'mme'], ['tau-accept', 'mme', 'ue'],

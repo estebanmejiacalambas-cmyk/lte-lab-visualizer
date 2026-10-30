@@ -1,7 +1,5 @@
 import type { SimulationDefinition, SimulationEvent } from '../types/simulation';
 import { event, online, success, waiting } from './helpers';
-
-// Display-only excerpts from the supplied Paging specification; never executed.
 const step = (e: Parameters<typeof event>[0], observe: string, question: string, answer: string): SimulationEvent => event({
   ...e, teaching: { observe, why: e.explanation, question, answer },
 });
@@ -66,7 +64,7 @@ export const paging: SimulationDefinition = {
     step({id:'paging-tun',group:'validate',title:'Confirmar TUN dentro de ue1',
       command:'sudo ip netns exec ue1 ip -4 addr show tun_srsue\nip -4 addr show tun_srsue 2>/dev/null || echo "OK: tun_srsue nao esta no namespace principal"',commandSource:'provided',
       output:'inet 172.16.0.2/24\nOK: tun_srsue nao esta no namespace principal',
-      explanation:'A interface do UE está em ue1 e não aparece no namespace principal. Os trechos reproduzem os critérios fornecidos, sem consultar interfaces reais.',
+      explanation:'A interface do UE está em ue1 e não aparece no namespace principal. Os estados são simulados, sem consultar interfaces reais.',
       takeaway:'A separação evita que o host trate o endereço do UE como seu próprio endereço.',patch:{pagingNamespace:true}},
       'A TUN fica dentro da área ue1.', 'Basta criar um namespace vazio?', 'Não. Precisamos confirmar que tun_srsue realmente foi colocada dentro dele.'),
     step({id:'paging-route',group:'validate',title:'Rota downlink pelo srsEPC',
@@ -82,7 +80,7 @@ export const paging: SimulationDefinition = {
       'O pacote chega ao EPC enquanto o rádio está Idle.', 'A primeira resposta deve levar exatamente 541 ms?', 'Não. Esse valor foi observado em um exemplo; a latência varia e não é medida pelo mock.'),
     step({id:'paging-notification',group:'paging',title:'EPC identifica UE para downlink',
       output:'Found UE for Downlink Notification',protocol:'EPC / S1AP',
-      explanation:'O EPC identifica o contexto do UE para o tráfego downlink. A seta representa didaticamente o acionamento do Paging rumo ao eNodeB, não uma decodificação de pacote fornecida nesta tela.',
+      explanation:'O EPC identifica o contexto do UE para o tráfego downlink. A seta representa didaticamente o acionamento do Paging rumo ao eNodeB, não uma decodificação de pacote real.',
       takeaway:'Há tráfego para um UE sem conexão ativa.',routes:[{from:'mme',to:'enb',label:'Paging · representação lógica'}]},
       'O chamado parte do EPC em direção ao acesso.', 'É necessário manter todos os UEs conectados?', 'Não. Paging permite chamar um UE registrado que está ocioso.'),
     step({id:'paging-match',group:'paging',title:'Paging · S-TMSI reconhecido',

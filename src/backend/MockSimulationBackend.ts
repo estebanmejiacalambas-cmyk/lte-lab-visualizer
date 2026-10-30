@@ -8,7 +8,6 @@ export class MockSimulationBackend implements SimulationBackend {
   readonly mode = 'mock' as const;
   constructor(private delayMs = 500) {}
   getSimulation(id: SimulationId) { return { attach, handover, tau, paging }[id]; }
-  // Commands are display-only strings. No process or network API is used here.
   execute(event: SimulationEvent, signal: AbortSignal): Promise<{output: string}> {
     return new Promise((resolve, reject) => {
       const abort = () => { clearTimeout(timer); reject(new DOMException('Operação cancelada', 'AbortError')); };
